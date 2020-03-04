@@ -59,15 +59,16 @@
 \usepackage[acronym, toc, section=chapter]{glossaries}
 % https://tex.stackexchange.com/a/73768 disable hyperref for glossary
 \usepackage{xparse}
-\DeclareDocumentCommand{\newdualentry}{ O{} O{} m m m m } {
+\DeclareDocumentCommand{\newdualentry}{ O{} O{} m m m m } {%
   \newglossaryentry{gls-#3}{name={#5},text={#5\glsadd{#3}},
-    description={#6},#1
-  }
-  \makeglossaries
-  \newacronym[see={[Glossary:]{gls-#3}},#2]{#3}{#4}{#5\glsadd{gls-#3}}
+      description={#6},#1
+  }%
+  \newacronym[see={gls-#3},description={#5},#2]{#3}{#4}{#5\glsadd{gls-#3}}%
 }
-\glsdisablehyper
+% \glsdisablehyper
 \makeglossaries
+
+
 
 %%%%%%%%%%%%%%%%
 % Nomenclature %
