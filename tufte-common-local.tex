@@ -1,0 +1,344 @@
+%!TEX root = ./main.tex
+
+%%% Default imports
+
+% mock text
+\usepackage{lipsum}
+
+% For figure displays
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{caption}
+\usepackage{subcaption}
+
+% basic math display
+\usepackage{amssymb}
+% define a mathnote which is equivalent to marginnote but inside an align env
+\def\mathnote#1{%
+  \tag*{\rlap{\hspace\marginparsep\smash{\parbox[t]{\marginparwidth}{%
+  \footnotesize#1}}}}
+}
+
+%%%%%%%%%
+% Index %
+%%%%%%%%%
+% Generates the index https://en.wikibooks.org/wiki/LaTeX/Indexing
+% https://www.overleaf.com/learn/latex/Indices
+% To make clickable links with hyperref
+% pass nohyper option to tufte documentclass
+% and load hyperref after imakeidx
+\usepackage{imakeidx}
+\indexsetup{level=\chapter*, toclevel=chapter}
+\makeindex[title=Index, columns=1, intoc]
+
+\usepackage[svgnames]{xcolor}
+\definecolor{mydarkblue}{rgb}{0,0.08,0.45}
+\definecolor{myblue}{RGB}{18,75,126}
+\definecolor{burgundy}{RGB}{128,0,32}
+
+\usepackage{hyperref}
+\hypersetup{
+    linktoc=all,
+    breaklinks=true,
+    colorlinks=true,
+    linkcolor=mydarkblue,
+    citecolor=mydarkblue,
+    filecolor=mydarkblue,
+    urlcolor=mydarkblue
+}
+
+%%%%%%%%%%%%
+% Glossary %
+%%%%%%%%%%%%
+
+% https://www.overleaf.com/learn/latex/Glossaries
+% Terminal: makeglossaries main
+% rebuild main.tex
+% To make clickable links with hyperref
+% load hyperref before glossaries
+\usepackage[acronym, toc, section=chapter]{glossaries}
+% https://tex.stackexchange.com/a/73768 disable hyperref for glossary
+\usepackage{xparse}
+\DeclareDocumentCommand{\newdualentry}{ O{} O{} m m m m } {
+  \newglossaryentry{gls-#3}{name={#5},text={#5\glsadd{#3}},
+    description={#6},#1
+  }
+  \makeglossaries
+  \newacronym[see={[Glossary:]{gls-#3}},#2]{#3}{#4}{#5\glsadd{gls-#3}}
+}
+\glsdisablehyper
+\makeglossaries
+
+%%%%%%%%%%%%%%%%
+% Nomenclature %
+%%%%%%%%%%%%%%%%
+
+% to build nomenclature
+% makeindex main.nlo -s nomencl.ist -o main.nls
+% rebuild main.tex
+\usepackage{etoolbox}  % required in input_files/nomenclature.tex
+\usepackage[intoc]{nomencl}
+\makenomenclature
+\nomlabelwidth=30mm
+\setlength{\nomitemsep}{.5\parsep}
+\renewcommand{\nomname}{Notations}
+\newcommand{\nomunit}[1]{%
+\renewcommand{\nomentryend}{\hspace*{\fill}#1}}
+
+% Add appendix to each chapter
+\usepackage{appendix}
+% You may need to comment the next import depending on your version of LaTeX
+% see https://tex.stackexchange.com/q/425600
+\let\counterwithout\relax
+\let\counterwithin\relax
+\usepackage{chngcntr}
+
+\AtBeginEnvironment{subappendices}{%
+\newpage
+\section*{Appendices}
+\phantomsection
+\addtocontents{toc}{\vspace{1ex}} % small vertical space
+\addtocontents{toc}{\protect\contentsline{section}{\protect\textsc{Appendices}}{}{}}
+\counterwithin{equation}{section}
+\counterwithin{figure}{section}
+\counterwithin{table}{section}
+}
+\AtEndEnvironment{subappendices}{%
+\counterwithin{equation}{section}
+\counterwithout{figure}{section}
+\counterwithout{table}{section}
+}
+
+% chapter format
+\titleformat{\chapter}
+  [display]%
+  {\bfseries\huge}
+  {\marginnote[0em]{\resizebox{!}{1.2cm}{\fboxsep=1pt%
+  \colorbox{black!60}{\color{white}{\thechapter}}
+  }\filright}}
+  {-2em}
+  {\raggedleft}
+  []
+
+% % section format
+\titleformat{\section}%
+  [hang]%
+  {\color{myblue}\Large\normalfont\scshape}%
+  {\makebox[30pt][r]{\smallcaps{\thesection}}}{15pt}{}
+
+% subsection format
+\titleformat{\subsection}%
+  [hang]%
+  {\normalfont\scshape\color{myblue}}%
+  {\makebox[30pt][r]{\thesubsection}}{15pt}{\normalfont\itshape\color{Black}}
+
+  \titlespacing*{\chapter}
+    {0pt}
+    {30pt}
+    {20pt}
+\titlespacing*{\section}
+  {-45pt}
+  {3.5ex plus 1ex minus .2ex}
+  {2.3ex plus .2ex}
+\titlespacing*{\subsection}
+  {-45pt}
+  {3.5ex plus 1ex minus .2ex}
+  {2.3ex plus .2ex}
+
+% ------------------------------------- %
+%           Table of content
+% ------------------------------------- %
+
+% TOC at the beginning of each chapter as marginnote
+\newcommand{\dochaptoc}{\marginnote{\startcontents\vbox{\noindent\scshape\normalsize}\vskip1ex\printcontents{l}{1}{}}}
+
+% Part
+\titlecontents{part}
+  [0em]
+  {\vskip12pt\scshape \hypersetup{linkcolor=myblue}\Large}
+  {\hypersetup{linkcolor=myblue}\thecontentslabel\enspace}
+  {}
+  {\hspace{0.5em}\color{burgundy}\contentspage}
+  [\vskip 6pt]
+
+% Chapter
+\newcounter{chapcntr}
+\setcounter{chapcntr}{-1}
+
+\titlecontents{chapter}
+  [0em]
+  {\vskip12pt\scshape \stepcounter{chapcntr} \large}
+  {\thecontentslabel\enspace}
+  {}
+  {\hspace{0.5em}\color{burgundy}\contentspage}[\vskip 6pt]
+
+% Section
+\titlecontents{section}
+  [1em]
+  {\ifboolexpr{test {\ifnumequal{\thechapcntr}{0}}}
+                    {\color{white}}
+                    {\ifboolexpr{test {\ifnumequal{\thechapcntr}{8}}}
+                                {\color{white}}
+                                {\color{black}}}}
+  {\hypersetup{linkcolor=black}\thecontentslabel\enspace}
+  {}
+  {\hspace{0.5em}\color{burgundy}\contentspage}[\vskip 4pt]
+
+% Sub-section
+\titlecontents{subsection}
+  [2em]
+  {}
+  {\hypersetup{linkcolor=black}\itshape\thecontentslabel\enspace}
+  {}
+  {\hspace{0.5em}\color{burgundy}\contentspage}
+  [\vskip 3pt]
+
+% \subsubsection
+\titlecontents{subsubsection}
+  [3em]
+  {}
+  {\hypersetup{linkcolor=black}\itshape\thecontentslabel\enspace}
+  {}
+  {\hspace{0.5em}\color{burgundy}\contentspage}[\vskip 3pt]
+
+%%%%%%%% MINITOCs for Chapters
+\newcommand\partialtocname{Chapter contents}
+
+\titlecontents{lsection}
+  [2em]
+  {\footnotesize\normalfont}
+  {\contentslabel{2em}}
+  {}
+  {\hfill\color{burgundy}\contentspage}
+
+\titlecontents{lsubsection}[0pt]
+  {\scriptsize}
+  {\space}
+  {}
+  {\hfill}% \space\textbullet
+
+%%%%%%%%%%%%
+% Biblatex % (Custom)
+%%%%%%%%%%%%
+
+% Biblatex cheatsheet
+% http://tug.ctan.org/info/biblatex-cheatsheet/biblatex-cheatsheet.pdf
+\usepackage[utf8]{inputenc}
+\usepackage{csquotes,xpatch}% recommended
+\usepackage[authordate,
+    isbn=false,
+    url=false,
+    backref=true,
+    backrefstyle=none,
+    backend=biber,
+    % natbib=true,
+    eprint=true,
+    doi=false,
+    maxcitenames=3,
+    defernumbers=true,
+    ibidtracker=false,
+    uniquename=false,
+    giveninits=true
+]{biblatex-chicago}
+% Using backref=true, backrefstyle=none, the following sets backrefs display
+\DefineBibliographyStrings{english}{%
+  backrefpage = {\lowercase{s}ee p.\!},%
+  backrefpages = {\lowercase{s}ee pp.\!}%
+}
+% For a chapterwise biblio see https://tex.stackexchange.com/q/403421
+% use refsection=chapter at import
+% \printbibliography[heading=subbibliography]
+
+% You can add as many bib file as you want
+% \addbibresource{bibliography.bib}
+
+% for full names in fullcite
+\preto\fullcite{\AtNextCite{\defcounter{maxnames}{99}}}
+\renewcommand*{\nameyeardelim}{\addcomma\space}
+\usepackage{csquotes}
+
+% make title clickable
+% https://tex.stackexchange.com/a/48409
+\newbibmacro{string+doiurlisbn}[1]{%
+  \iffieldundef{doi}{%
+    \iffieldundef{url}{%
+      \iffieldundef{isbn}{%
+        \iffieldundef{issn}{%
+          #1%
+        }{%
+          \href{http://books.google.com/books?vid=ISSN\thefield{issn}}{#1}%
+        }%
+      }{%
+        \href{http://books.google.com/books?vid=ISBN\thefield{isbn}}{#1}%
+      }%
+    }{%
+      \href{\thefield{url}}{#1}%
+    }%
+  }{%
+    \href{http://dx.doi.org/\thefield{doi}}{#1}%
+  }%
+}
+\DeclareFieldFormat*{title}{\usebibmacro{string+doiurlisbn}{\mkbibemph{#1}}}
+
+% Process the fields of each bib entry
+\DeclareSourcemap{
+    \maps{
+        \map{
+        % Replaces '{\_}', '{_}' or '\_' with just '_'
+        \step[fieldsource=url,
+              match=\regexp{\{\\\_\}|\{\_\}|\\\_},
+              replace=\regexp{\_}]
+        % Replaces '{'$\sim$'}', '$\sim$' or '{~}' with just '~'
+        \step[fieldsource=url,
+              match=\regexp{\{\$\\sim\$\}|\{\~\}|\$\\sim\$},
+              replace=\regexp{\~}]
+        % Replaces '{\$}'
+        \step[fieldsource=url,
+              match=\regexp{\{\\\x{26}\}},
+              replace=\regexp{\x{26}}]
+        \step[fieldset=abstract, null]
+        \step[fieldset=annotation, null]
+        \step[fieldset=volume, null]
+        \step[fieldset=number, null]
+        \step[fieldset=eid, null]
+        \step[fieldset=pages, null]
+        \step[fieldset=issue, null]
+        \step[fieldset=location, null]
+        \step[fieldset=month, null]
+    }
+  }
+}
+
+\DeclareFieldFormat*{journaltitle}{#1}
+\DeclareFieldFormat*{booktitle}{#1}
+
+% if babel english
+% write dissertation instead of diss
+\DefineBibliographyStrings{english}{phdthesis = {PhD dissertation}}
+
+% create link to arXiv:<arxivId>
+% inspired by https://tex.stackexchange.com/a/419890
+% \makeatletter (uncomment when using in another class like beamer)
+\DeclareFieldFormat{eprint:arxiv}{%
+  arXiv\addcolon%
+  \ifhyperref%
+    {\href{http://arxiv.org/\abx@arxivpath/\iffieldundef{eprintclass}
+                                            {#1}
+                                            {\thefield{eprintclass}/#1}}
+          {\iffieldundef{eprintclass}
+                        {}
+                        {\textsf{\thefield{eprintclass}/}}\textsf{#1}}}%
+    {\iffieldundef{eprintclass}
+                  {}
+                  {\textsf{\thefield{eprintclass}/}}\textsf{#1}}%
+}
+% \makeatother (uncomment when using in another class like beamer)
+
+\usepackage{silence}
+\WarningFilter{biblatex}{Patching footnotes failed}
+\WarningFilter{biblatex}{Attempt to redefine deprecated}
+\WarningFilter{latex}{Marginpar on page}
+\WarningFilter{latexfont}{Font shape}
+\WarningFilter{latexfont}{Some font}
+\WarningFilter{latexfont}{Size substitutions}
+\WarningFilter{hyperref}{Token not allowed in a PDF string}

@@ -1,0 +1,48 @@
+%!TEX root = ../main.tex
+% To build the glossary: makeglossaries main
+
+%%%%% Acronyms
+% \newacronym[plural={<plural acronym>},
+%             first={<text displayed at first occurrence>},
+%             firstplural={<idem, with plural>}]
+%             {<label>}
+%             {<acronym>}
+%             {<full name to display in acronym section>}
+
+\newacronym{gcd}
+           {GCD}
+           {Greatest Common Divisor}
+
+\newacronym{lcm}
+           {LCM}
+           {Least Common Multiple}
+
+%%%% Glossary entries
+% \newglossaryentry{<label>}{
+%             name={<abbreviation>},
+%             plural={<plural of the text displayed>},
+%             description={<full name to display in glossary section>}}
+
+\newglossaryentry{tomato}{
+            name=tomato,
+            plural=tomatoes,
+            description={kind of fruit}}
+
+\newglossaryentry{latex}{
+            name=latex,
+            description={Is a mark up language specially suited for scientific documents}}
+
+\newglossaryentry{maths}{
+            name=mathematics,
+            description={Mathematics is what mathematicians do}}
+
+\newglossaryentry{formula}{
+            name=formula,
+            description={A mathematical expression}}
+
+%%%% Dual entry acronym/glossary entry
+\newdualentry{dpp}                         % label
+            {DPP}                          % abbreviation
+            {Determinantal Point Process}  % long form
+            {DPP description}              % description
+

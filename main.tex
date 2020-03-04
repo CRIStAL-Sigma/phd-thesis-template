@@ -1,0 +1,131 @@
+% Template inspired by
+% https://tufte-latex.github.io/tufte-latex/
+% http://c-elvira.github.io/ Ph.D. thesis
+% https://jflamant.github.io/ Ph.D. thesis
+% https://guilgautier.github.io/ Ph.D. thesis
+
+\documentclass[a4paper, twoside, table, justified,
+               nofonts, nobib, nohyper]{tufte-book}
+
+% Book metadata
+\title{Title}
+\author[Author]{Author}
+\publisher{Publisher}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% default imports and commands are located in
+% tufte-common-local.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{input_files/acronyms_and_glossary}  % must be imported in preamble
+
+% The bibliography is managed with biblatex
+\addbibresource{bibliography.bib}
+
+\usepackage{fontawesome}
+\newcommand{\conferenceIcon}{\textcolor{myblue}{\faUsers}}
+\newcommand{\paperIcon}{\textcolor{burgundy}{\faNewspaperO}}
+
+\usepackage{amsthm}
+\makeatletter
+\let\c@theorem\relax
+\let\c@corollary\relax
+\let\c@definition\relax
+\let\c@example\relax
+\let\c@lemma\relax
+\let\c@proposition\relax
+
+\let\corollary\relax
+\let\definition\relax
+\let\example\relax
+\let\lemma\relax
+\let\proposition\relax
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+\makeatother
+
+\usepackage{amsmath}
+\counterwithin{equation}{section}
+
+\usepackage{amsfonts, amssymb}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The front matter contains title page, acknowledgements, toc, nomenclature and dedication
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frontmatter
+
+\maketitle
+
+\setcounter{chapter}{-1}  % Start at Chapter 0 (Introduction)
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+\input{input_files/acknowledgements}
+
+\begin{fullwidth}
+    \tableofcontents
+\end{fullwidth}
+
+\listoffigures
+
+\listoftables
+
+\input{input_files/nomenclature}
+
+\input{input_files/dedication}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The main matter contains numbered chapter: introduction, chapters
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\mainmatter
+
+\input{input_files/introduction}  % Chapter 0
+
+\input{input_files/chapter_1}
+
+\input{input_files/chapter_2}
+
+\input{input_files/chapter_3}
+
+\input{input_files/chapter_4}
+
+\input{input_files/chapter_5}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The back matter contains unnumbered chapters
+% conclusion, french summary, bibliographies, indices, glossaries
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\backmatter
+
+\input{input_files/conclusion}
+
+\input{input_files/summary_french}
+
+\begin{fullwidth}
+    \printbibliography[heading=bibintoc]
+\end{fullwidth}
+
+\begin{fullwidth}
+    \printindex
+\end{fullwidth}
+
+\begin{fullwidth}
+    \printglossary[type=\acronymtype]
+    \printglossary
+\end{fullwidth}
+
+\input{input_files/abstract}
+
+\end{document}

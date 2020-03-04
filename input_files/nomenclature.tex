@@ -1,0 +1,31 @@
+%!TEX root = ../main.tex
+% to build nomenclature
+% makeindex main.nlo -s nomencl.ist -o main.nls
+% rebuild main.tex
+
+% A-Z sets the category
+% 0x sets the order items will be displayed
+
+\renewcommand\nomgroup[1]{%
+  \item[\bfseries\ifstrequal{#1}{A}{Physics Constants}{%
+  \ifstrequal{#1}{B}{Number Sets}{%
+  \ifstrequal{#1}{C}{Other Symbols}{}}}%
+]}
+
+\nomenclature[A, 01]{$g$}{Gravitational Constant
+  \nomunit{$6.67384 \times 10^{-11}\, N \cdot m^2/kg^2$}}
+\nomenclature[A, 02]{$c$}{Speed of light in a vacuum inertial system
+  \nomunit{$299,792,458\, m/s$}}
+\nomenclature[A, 03]{$h$}{Plank Constant
+  \nomunit{$6.62607 \times 10^{-34}\, Js$}}
+
+\nomenclature[B, 01]{$\mathbb{H}$}{Quaternions}
+\nomenclature[B, 02]{$\mathbb{C}$}{Complex Numbers}
+\nomenclature[B, 03]{$\mathbb{R}$}{Real Numbers}
+
+\nomenclature[C]{$V$}{Constant Volume}
+\nomenclature[C]{$\rho$}{Friction Index}
+
+\begin{fullwidth}
+  \printnomenclature
+\end{fullwidth}
